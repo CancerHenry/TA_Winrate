@@ -99,7 +99,7 @@ if __name__ == '__main__':
 
     src_list = os.listdir('.\data')
 
-    for src in src_list[:4]:
+    for src in src_list[:20]:
 
         result_dict = dict()
         result_dict['code'] = src[:-4]
