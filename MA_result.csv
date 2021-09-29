@@ -1,0 +1,6 @@
+code      ,best_avg_profit ,best_profit_slow ,best_profit_fast ,best_winrate ,best_winrate_slow ,best_winrate_fast ,best_gross_revenue ,best_revenue_slow ,best_revenue_fast
+0         ,0.0             ,0                ,0                ,0.0          ,0                 ,0                 ,0.0                ,0                 ,0
+sh.000001 ,3.066           ,23               ,187              ,0.909        ,6                 ,239               ,0.597              ,20                ,67
+sh.000300 ,3.888           ,10               ,232              ,0.857        ,2                 ,136               ,0.861              ,22                ,67
+sh.600000 ,5.632           ,25               ,246              ,0.857        ,2                 ,241               ,1.098              ,15                ,162
+sh.600009 ,10.048          ,24               ,245              ,1.0          ,13                ,208               ,8.431              ,2                 ,4

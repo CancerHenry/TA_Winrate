@@ -1,7 +1,7 @@
 import os
 import time
 import pandas as pd
-from talib.abstract import *
+from talib import abstract
 
 #src_list = os.listdir('.\data')
 
@@ -24,16 +24,16 @@ for src in src_list:
     best_revenue_fast = 0
     best_revenue_slow = 0
 
-    for slow in range(2, 10):
-        for fast in range(2*slow, 15):
+    for slow in range(2, 15):
+        for fast in range(2*slow, 35):
             stock = pd.read_csv(f'.\data\{src}')
             open = stock['open']
             high = stock['high']
             low = stock['low']
             close = stock['close']
 
-            stock['SMA_s'] = SMA(close, timeperiod=slow)
-            stock['SMA_f'] = SMA(close, timeperiod=fast)
+            stock['SMA_s'] = abstract.SMA(close, timeperiod=slow)
+            stock['SMA_f'] = abstract.SMA(close, timeperiod=fast)
 
             # Delete data with NaN values
             stock = stock[stock['SMA_s'].notna()]

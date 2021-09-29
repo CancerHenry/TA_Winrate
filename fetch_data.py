@@ -1,6 +1,10 @@
 import time
+import os
 import baostock as bs
 import pandas as pd
+
+if not os.path.exists('./data'):
+    os.mkdir('./data')
 
 lg = bs.login()
 
