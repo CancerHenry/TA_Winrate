@@ -10,16 +10,10 @@ def find_best_ma_parameter(src, slow_min, slow_max, fast_max):
 
     best_winrate = 0
     best_avg_profit = 0
-
-    best_profit_fast = 0
-    best_profit_slow = 0
-
-    best_winrate_fast = 0
-    best_winrate_slow = 0
-
     best_gross_revenue = 0
     best_revenue_fast = 0
     best_revenue_slow = 0
+    trading_times = 0
 
     for slow in range(slow_min, slow_max):
         for fast in range(2*slow, fast_max):
@@ -71,28 +65,18 @@ def find_best_ma_parameter(src, slow_min, slow_max, fast_max):
             avg_profit = round(total_profit_percent / total, 3)
             win_rate = round(success / total, 3)
 
-            if avg_profit > best_avg_profit:
-                best_avg_profit = avg_profit
-                best_profit_fast = fast
-                best_profit_slow = slow
-
-            if win_rate > best_winrate:
-                best_winrate = win_rate
-                best_winrate_fast = fast
-                best_winrate_slow = slow
-
             if capital - 1 > best_gross_revenue:
                 best_gross_revenue = capital - 1
                 best_revenue_fast = fast
                 best_revenue_slow = slow
+                best_winrate = win_rate
+                best_avg_profit = avg_profit
+                trading_times = total
 
     result = dict()
     result['best_avg_profit'] = best_avg_profit
-    result['best_profit_slow'] = best_profit_slow
-    result['best_profit_fast'] = best_profit_fast
     result['best_winrate'] = best_winrate
-    result['best_winrate_slow'] = best_winrate_slow
-    result['best_winrate_fast'] = best_winrate_fast
+    result['trading_times'] = trading_times
     result['best_gross_revenue'] = round(best_gross_revenue, 3)
     result['best_revenue_slow'] = best_revenue_slow
     result['best_revenue_fast'] = best_revenue_fast
@@ -101,8 +85,8 @@ def find_best_ma_parameter(src, slow_min, slow_max, fast_max):
 
 
 def init_df():
-    dict = {'code': '0', 'best_avg_profit': 0, 'best_profit_slow': 0, 'best_profit_fast': 0,
-            'best_winrate': 0, 'best_winrate_slow': 0, 'best_winrate_fast': 0, 'best_gross_revenue': 0,
+    dict = {'code': '0', 'best_avg_profit': 0, 'trading_times': 0,
+            'best_winrate': 0, 'best_gross_revenue': 0,
             'best_revenue_slow': 0, 'best_revenue_fast': 0}
     output = pd.DataFrame([dict]).set_index('code')
     return output
@@ -121,14 +105,9 @@ if __name__ == '__main__':
         result_dict['code'] = src[:-4]
 
         result_dict['best_avg_profit'] = 0
-        result_dict['best_profit_slow'] = 0
-        result_dict['best_profit_fast'] = 0
         result_dict['best_winrate'] = 0
-        result_dict['best_winrate_slow'] = 0
-        result_dict['best_winrate_fast'] = 0
         result_dict['best_gross_revenue'] = 0
-        result_dict['best_revenue_slow'] = 0
-        result_dict['best_revenue_fast'] = 0
+        result_dict['trading_times'] = 0
 
         pool = Pool(processes=6)
         result = []
@@ -141,20 +120,14 @@ if __name__ == '__main__':
 
         for i in result:
             current_result = i.get()
-            if current_result['best_avg_profit'] > result_dict['best_avg_profit']:
-                result_dict['best_avg_profit'] = current_result['best_avg_profit']
-                result_dict['best_profit_slow'] = current_result['best_profit_slow']
-                result_dict['best_profit_fast'] = current_result['best_profit_fast']
-
-            if current_result['best_winrate'] > result_dict['best_winrate']:
-                result_dict['best_winrate'] = current_result['best_winrate']
-                result_dict['best_winrate_slow'] = current_result['best_winrate_slow']
-                result_dict['best_winrate_fast'] = current_result['best_winrate_fast']
 
             if current_result['best_gross_revenue'] > result_dict['best_gross_revenue']:
                 result_dict['best_gross_revenue'] = current_result['best_gross_revenue']
                 result_dict['best_revenue_fast'] = current_result['best_revenue_fast']
                 result_dict['best_revenue_slow'] = current_result['best_revenue_slow']
+                result_dict['best_avg_profit'] = current_result['best_avg_profit']
+                result_dict['best_winrate'] = current_result['best_winrate']
+                result_dict['trading_times'] = current_result['trading_times']
 
         print('++++++++++++++++++++++++++++++++++++')
         pprint(result_dict)

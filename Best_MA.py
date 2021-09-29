@@ -11,21 +11,15 @@ for src in src_list:
 
     start = time.time()
 
-    best_winrate = 0
-    best_avg_profit = 0
-
-    best_profit_fast = 0
-    best_profit_slow = 0
-
-    best_winrate_fast = 0
-    best_winrate_slow = 0
-
     best_gross_revenue = 0
     best_revenue_fast = 0
     best_revenue_slow = 0
+    best_winrate = 0
+    best_avg_profit = 0
+    trading_times = 0
 
-    for slow in range(2, 15):
-        for fast in range(2*slow, 35):
+    for slow in range(2, 7):
+        for fast in range(2*slow, 15):
             stock = pd.read_csv(f'.\data\{src}')
             open = stock['open']
             high = stock['high']
@@ -74,18 +68,11 @@ for src in src_list:
             avg_profit = round(total_profit_percent / total, 3)
             win_rate = round(success / total, 3)
 
-            if avg_profit > best_avg_profit:
-                best_avg_profit = avg_profit
-                best_profit_fast = fast
-                best_profit_slow = slow
-
-            if win_rate > best_winrate:
-                best_winrate = win_rate
-                best_winrate_fast = fast
-                best_winrate_slow = slow
-
             if capital - 1 > best_gross_revenue:
-                best_gross_revenue = capital - 1
+                best_gross_revenue = round(capital - 1, 3)
+                best_winrate = win_rate
+                best_avg_profit = avg_profit
+                trading_times = total
                 best_revenue_fast = fast
                 best_revenue_slow = slow
 
@@ -102,10 +89,7 @@ for src in src_list:
     print(f'Stock: {src[:-4]}')
     print('-------------')
     print(
-        f' Best profit is {best_avg_profit} % \n With slow = {best_profit_slow}, fast = {best_profit_fast}')
-    print(
-        f' Best winrate is {best_winrate} \n With slow = {best_winrate_slow}, fast={best_winrate_fast}')
-    print('-------------')
-    print(
         f'Best gross revenue is {best_gross_revenue} \n With slow = {best_revenue_slow}, fast = {best_revenue_fast}')
+    print(
+        f"  With win rate: {best_winrate}, average profit: {best_avg_profit} %, trading_times: {trading_times}")
     print('++++++++++++++++++++++++++++++++++++')
